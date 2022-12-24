@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Harmony;
+using HarmonyLib;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -23,8 +23,8 @@ public static class PatchPathFinder {
 	static PatchPathFinder()
 	{
 		try{
-			var harmony = HarmonyInstance.Create("com.github.k2ymg.simple_pathfinding");
-			patch(harmony);
+			var harmony = new Harmony("com.github.k2ymg.simple_pathfinding");
+			harmony.PatchAll();
 		}catch(Exception e){
 			Log.Error(e.ToString());
 		}
@@ -75,7 +75,7 @@ public static class PatchPathFinder {
 		return false;
 	}
 
-	public static void patch(HarmonyInstance harmony)
+	public static void patch(Harmony harmony)
 	{
 		Type target_class = typeof(PatchPathFinder);
 		Type original_class = typeof(PathFinder);
@@ -616,9 +616,9 @@ public static class MyPathFinder
 
 	private static int distanceToEnd(int x, int y)
 	{
-		int dx = Mathf.Abs(sEndX - x);
-		int dy = Mathf.Abs(sEndY - y);
-		return sCardinal * (dx + dy) + sD2C * Mathf.Min(dx, dy);
+		int dx = Math.Abs(sEndX - x);
+		int dy = Math.Abs(sEndY - y);
+		return sCardinal * (dx + dy) + sD2C * Math.Min(dx, dy);
 	}
 
 	private static NodeSet[] sNodeSet;
@@ -725,7 +725,7 @@ public static class MyPathFinder
 			int c = 0;
 			int j = list.Count;
 			while(j-- > 0)
-				c = Mathf.Max(c, PathFinder.GetBlueprintCost(list[j], sTraverseParms.pawn));
+				c = Math.Max(c, PathFinder.GetBlueprintCost(list[j], sTraverseParms.pawn));
 			if(c == int.MaxValue){
 				goto impassable;
 			}
